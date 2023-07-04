@@ -19,27 +19,32 @@ class ForgotPasswordAPIController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
-    
+
         $user = User::where('email', $request->email)->first();
-    
+        $email = $user->email;
+
         if (!$user) {
             return response()->json(['error' => 'Email tidak ditemukan'], 404);
         }
-    
+
         if (is_null($user->email_verified_at)) {
             return response()->json(['error' => 'Email tidak valid atau belum diverifikasi'], 400);
         }
-    
+
         $token = Password::getRepository()->create($user);
-    
-        $resetLink = 'https://www.google.co.id/reset-password?token=' . $token;
-    
+
+        $resetLink = 'http://192.168.1.26:5173/reset-password';
+
         Mail::to($user->email)->send(new ResetLinkEmail($user, $resetLink));
-    
-        return response()->json(['message' => 'Email pengaturan ulang kata sandi telah dikirim'], 200);
+
+        return response()->json([
+            'message' => 'Email pengaturan ulang kata sandi telah dikirim',
+            'email' => $email,
+            'token' => $token
+        ], 200);
     }
 
-    
+
     public function ChangePassword(Request $request)
     {
         $request->validate([
@@ -62,12 +67,4 @@ class ForgotPasswordAPIController extends Controller
             return response()->json(['error' => 'Gagal mereset password'], 400);
         }
     }
-
-
-
-
-
-
-
-
 }

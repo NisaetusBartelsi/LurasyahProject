@@ -26,7 +26,6 @@ class ResetLinkEmail extends Mailable
     {
         $this->user = $user;
         $this->resetLink = $resetLink;
-
     }
 
     /**
@@ -37,9 +36,6 @@ class ResetLinkEmail extends Mailable
     public function build()
     {
         return $this->view('forgotpass.reset-password')
-            ->subject('Reset Password')
-            ->with([
-                'resetLink' => 'https://www.google.co.id',
-            ]);
+            ->subject('Reset Password');
     }
 }

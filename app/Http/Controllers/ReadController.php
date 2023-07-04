@@ -81,7 +81,7 @@ class ReadController extends Controller
 
         $comments = Comment::where('images_companies_id', $images_companies_id)
             ->join('users', 'comments.user_id', '=', 'users.id')
-            ->select('comments.comment', 'comments.update_at', 'users.username', 'users.profile')
+            ->select('comments.comment', 'comments.update_at', 'users.username', 'users.profile', 'comments.id')
             ->orderBy('comments.update_at', 'desc')
             ->get();
 
